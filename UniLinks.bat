@@ -1,5 +1,5 @@
 @echo off
-ECHO Opening Links:
+ECHO Open Links:
 start "" https://www.moodle.tum.de/
 start "" https://mail.google.com/mail/u/0/#inbox
 start "" https://calendar.google.com/calendar/u/0/r/week
