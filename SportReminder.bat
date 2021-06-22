@@ -1,4 +1,5 @@
 @echo off
+setlocal enableDelayedExpansion
 :: ================================================================
 :: Das Script erinnert dich daran Sport zu machen. 
 :: Passe die Übungen und Wiederholungen für dich persönlich an.
@@ -14,9 +15,9 @@ set squatVariants[4]=Einbeinige Squats, 5 pro Seite
 :: Push-Up Varianten
 set pushUpVariants[0]=Basic Push-Ups
 set pushUpVariants[1]=Diamant Push-Ups
-set pushUpVariants[2]=Wide Hands Push-Ups
-set pushUpVariants[3]=Gestaffelter Push-Ups
-set pushUpVariants[4]=Kniender Push-Up
+set pushUpVariants[2]=Wide Hand Push-Ups
+set pushUpVariants[3]=Gestaffelte Push-Ups
+set pushUpVariants[4]=Kniende Push-Up
 
 :: Sit-Up Varianten
 set sitUpVariants[0]=Basic Sit-Ups
@@ -27,15 +28,19 @@ set sitUpVariants[4]=Toe Touches
 
 :: Random Varianten auswählen, 2x generieren, da oft die gleichen Werte bei erneutem Ausführen auftreten idk
 set min=0
-set max=4
-set /a randomSquat=min+(max-min+1)*%random%/32768
-set /a randomSquat=min+(max-min+1)*%random%/32768
-set /a randomPushUp=min+(max-min+1)*%random%/32768
-set /a randomPushUp=min+(max-min+1)*%random%/32768
-set /a randomSitUp=min+(max-min+1)*%random%/32768
-set /a randomSitUp=min+(max-min+1)*%random%/32768
+CALL :getArrayLength squatVariants, maxSquats
+CALL :getArrayLength pushUpVariants, maxPushUps
+CALL :getArrayLength sitUpVariants, maxSitUps
 
-setlocal enableDelayedExpansion
+set /a randomSquat=min+(maxSquats-min+1)*%random%/32768
+set /a randomSquat=min+(maxSquats-min+1)*%random%/32768
+
+set /a randomPushUp=min+(maxPushUps-min+1)*%random%/32768
+set /a randomPushUp=min+(maxPushUps-min+1)*%random%/32768
+
+set /a randomSitUp=min+(maxSitUps-min+1)*%random%/32768
+set /a randomSitUp=min+(maxSitUps-min+1)*%random%/32768
+
 ECHO SPORT - DU SCHAFFST DAS!
 ECHO.
 ECHO 10 !squatVariants[%randomSquat%]!
@@ -55,4 +60,15 @@ ECHO.
 pause
 
 endlocal
-exit
+exit /B %ERRORLEVEL%
+
+:getArrayLength
+set /a "x=0"
+:loop
+if defined %~1[%x%] ( 
+    set /a "x+=1"
+    GOTO :loop 
+)
+set /a "x-=1"
+set %~2=%x%
+exit /B 0
